@@ -18,7 +18,7 @@ func TestQuery(t *testing.T) {
 		"q":     "test",
 		"hello": "world",
 	}
-	url, err := functions.GetCompleteQuery("http://www.google.com", query)
+	url, _, err := functions.GetCompleteQuery("http://www.google.com", query)
 	if err != nil {
 		t.Error(err)
 	}
@@ -70,17 +70,17 @@ func TestData(t *testing.T) {
 func TestRequest(t *testing.T) {
 	s, err := requests.NewSession(20000, "")
 	if err != nil {
-		panic(err)
+		t.Error(err)
 	}
-	headers := []map[string]string{
-		{"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"},
-		{"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"},
-	}
-	r, err := s.MakeRequest("GET", "http://httpbin.org/get", nil, headers, nil, nil, false)
+	// headers := []map[string]string{
+	// 	{"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"},
+	// 	{"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"},
+	// }
+	r, err := s.MakeRequest("GET", "https://httpbin.org/get", nil, nil, nil, nil, false)
 	if err != nil {
 		t.Error(err)
 	}
 	if r.StatusCode() != 200 {
-		t.Errorf("incorrect status code. Wanted: 200, got: %d", r.StatusCode)
+		t.Errorf("incorrect status code. Wanted: 200, got: %d", r.StatusCode())
 	}
 }
