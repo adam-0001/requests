@@ -51,17 +51,11 @@ func (s *Session) MakeRequest(method string, url string, params map[string]strin
 	if err != nil {
 		return types.Response{}, err
 	}
-	if headers != nil || len(headers) > 0 {
+	if len(headers) > 0 {
 		req.Header = newHeaders
+		functions.FillNeededHeaders(host, &req.Header)
 	} else {
-		req.Header = map[string][]string{
-			"User-Agent":      {"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"},
-			"Accept":          {"*/*"},
-			"Accept-Encoding": {"gzip, deflate, br, utf-8"},
-			"Accept-Language": {"en-US,en;q=0.9"},
-			"Connection":      {"keep-alive"},
-			"Host":            {host},
-		}
+		functions.FillNeededHeaders(host, &req.Header)
 	}
 	start := time.Now()
 	resp, err := s.Client.Do(req)

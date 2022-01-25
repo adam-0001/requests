@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"requests"
 	"requests/functions"
 	"strings"
@@ -34,11 +35,6 @@ func TestHeaders(t *testing.T) {
 		{"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"},
 	}
 	newHeaders := functions.MakeHeaders(headers, []string{":method", ":authority"})
-	// fmt.Println(newHeaders)
-	// fmt.Println(newHeaders["Header-Order:"][0])
-	// fmt.Println(newHeaders["Header-Order:"][1])
-	// fmt.Println(newHeaders["PHeader-Order:"][0])
-	// fmt.Println(newHeaders["PHeader-Order:"][1])
 
 	if newHeaders["Header-Order:"][0] != "user-agent" ||
 		newHeaders["Header-Order:"][1] != "accept" {
@@ -72,14 +68,16 @@ func TestRequest(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	// headers := []map[string]string{
-	// 	{"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"},
-	// 	{"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"},
-	// }
-	r, err := s.MakeRequest("GET", "https://httpbin.org/get", nil, nil, nil, nil, false)
+	headers := []map[string]string{
+		{"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"},
+		{"Accept": "*/*"},
+	}
+	r, err := s.MakeRequest("GET", "https://httpbin.org/get", nil, headers, nil, nil, false)
 	if err != nil {
 		t.Error(err)
 	}
+	// ERROR HAS TO DO WITH PSUEDO HEADER ORDER BEING NULL : SEE HEADERS.GO
+	fmt.Println(r.Text())
 	if r.StatusCode() != 200 {
 		t.Errorf("incorrect status code. Wanted: 200, got: %d", r.StatusCode())
 	}
