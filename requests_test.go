@@ -1,16 +1,10 @@
-package main
+package requests
 
 import (
-	"requests"
 	"requests/functions"
 	"strings"
 	"testing"
 )
-
-type test struct {
-	helloworld  string `json:"helloworld"`
-	mellowporld int    `json:"mellowporld"`
-}
 
 func TestQuery(t *testing.T) {
 	// fmt.Println("Testing query")
@@ -49,21 +43,15 @@ func TestHeaders(t *testing.T) {
 }
 
 func TestData(t *testing.T) {
-	_, j, _ := functions.MakeBodyFromData(test{"meow", 42})
+	_, j, _ := functions.MakeBodyFromData(map[string]string{"hello": "world"})
 	if j != "application/json" {
 		t.Errorf("incorrect content-Type. Wanted: application/json, got: %s", j)
 	}
-	_, j, _ = functions.MakeBodyFromData(map[string]string{"hello": "world"})
-	if j != "application/json" {
-		t.Errorf("incorrect content-Type. Wanted: application/json, got: %s", j)
-	}
-	// _, _, _ = functions.MakeBodyFromData([]byte("hello=world"))
-	// fmt.Println(j)
 
 }
 
 func TestRequest(t *testing.T) {
-	s, err := requests.NewSession(20000, "")
+	s, err := NewSession(20000, "")
 	if err != nil {
 		t.Error(err)
 	}
@@ -79,5 +67,50 @@ func TestRequest(t *testing.T) {
 	// fmt.Println(r.Text())
 	if r.StatusCode() != 200 {
 		t.Errorf("incorrect status code. Wanted: 200, got: %d", r.StatusCode())
+	}
+}
+
+func TestRequestWithData(t *testing.T) {
+	// _, j, _ := functions.MakeBodyFromData(test{"meow", 42})
+	// if j != "application/json" {
+	// 	t.Errorf("incorrect content-Type. Wanted: application/json, got: %s", j)
+	// }
+	_, j, _ := functions.MakeBodyFromData(map[string]string{"hello": "world"})
+	if j != "application/json" {
+		t.Errorf("incorrect content-Type. Wanted: application/json, got: %s", j)
+	}
+
+	s, err := NewSession(20000, "")
+	if err != nil {
+		t.Error(err)
+	}
+
+	// jsonStr := []byte(`{"title":"Buy cheese and bread for breakfast."}`)
+
+	resp, err := s.Post("https://httpbin.org/post", map[string]string{"hello": "world"}, nil, nil, "flop=itsworking", true)
+	if err != nil {
+		t.Error(err)
+	}
+	resp1, err := s.Post("https://httpbin.org/post", nil, nil, nil, map[string]string{"hello": "world"}, true)
+	if err != nil {
+		t.Error(err)
+	}
+	text := resp.Text
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.Contains(text, "flop") {
+		t.Errorf("incorrect response. Wanted: flop in response body, got: %s", text)
+	}
+	if !strings.Contains(text, "hello") {
+		t.Errorf("incorrect response. Wanted: hello in url params, got: %s", text)
+	}
+
+	text = resp1.Text
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.Contains(text, "world") {
+		t.Errorf("incorrect response. Wanted: world in response body, got: %s", text)
 	}
 }

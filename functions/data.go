@@ -6,33 +6,72 @@ import (
 	"errors"
 	"io"
 	"reflect"
-	"strings"
 )
+
+var InvalidTypeError = errors.New("Invalid Data Type passed to Data")
+var InvalidStructError = errors.New("Structs Cannot Be passed to Data")
 
 func MakeBodyFromData(data interface{}) (io.Reader, string, error) {
 	switch x := data.(type) {
+	case nil:
+		return nil, "", nil
 	case string:
-		return strings.NewReader(x), "application/x-www-form-urlencoded", nil
+		return bytes.NewBuffer([]byte(x)), "application/x-www-form-urlencoded", nil
 	case []byte:
 		return bytes.NewBuffer(x), "application/x-www-form-urlencoded", nil
 	case io.Reader:
 		return x, "", nil
-	case nil:
-		return nil, "", nil
-	}
-	if reflect.ValueOf(data).Kind() == reflect.Map {
-		b, err := json.Marshal(data)
+	case map[string]string:
+		v, err := json.Marshal(x)
 		if err != nil {
 			return nil, "", err
 		}
-		return bytes.NewBuffer(b), "application/json", nil
+		return bytes.NewBuffer(v), "application/json", nil
+	case map[string]interface{}:
+		v, err := json.Marshal(x)
+		if err != nil {
+			return nil, "", err
+		}
+		return bytes.NewBuffer(v), "application/json", nil
+	case map[string][]string:
+		v, err := json.Marshal(x)
+		if err != nil {
+			return nil, "", err
+		}
+		return bytes.NewBuffer(v), "application/json", nil
+	case map[string][]interface{}:
+		v, err := json.Marshal(x)
+		if err != nil {
+			return nil, "", err
+		}
+		return bytes.NewBuffer(v), "application/json", nil
+	case map[string]int:
+		v, err := json.Marshal(x)
+		if err != nil {
+			return nil, "", err
+		}
+		return bytes.NewBuffer(v), "application/json", nil
+	case map[string]float64:
+		v, err := json.Marshal(x)
+		if err != nil {
+			return nil, "", err
+		}
+		return bytes.NewBuffer(v), "application/json", nil
+	case map[string]bool:
+		v, err := json.Marshal(x)
+		if err != nil {
+			return nil, "", err
+		}
+		return bytes.NewBuffer(v), "application/json", nil
+	case []interface{}:
+		v, err := json.Marshal(x)
+		if err != nil {
+			return nil, "", err
+		}
+		return bytes.NewBuffer(v), "application/json", nil
 	}
 	if reflect.ValueOf(data).Kind() == reflect.Struct {
-		b, err := json.Marshal(data)
-		if err != nil {
-			return nil, "", err
-		}
-		return bytes.NewBuffer(b), "application/json", nil
+		return nil, "", InvalidStructError
 	}
-	return nil, "", errors.New("invalid data type")
+	return nil, "", InvalidTypeError
 }

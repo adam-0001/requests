@@ -2,7 +2,6 @@ package types
 
 import (
 	"encoding/json"
-	"io"
 	"time"
 
 	http "github.com/papermario8420/fhttp"
@@ -17,7 +16,7 @@ type Response struct {
 	cookies      map[string]string
 	encoding     string
 	Elapsed      time.Duration
-	text         string
+	Text         string
 }
 
 type Session struct {
@@ -25,17 +24,17 @@ type Session struct {
 	ClientHello tls.ClientHelloID
 }
 
-func (r *Response) Text() (string, error) {
-	if r.text == "" {
-		responseBody, err := io.ReadAll(r.HttpResponse.Body)
-		if err != nil {
-			return "", err
-		}
-		r.text = string(responseBody)
-		return r.text, nil
-	}
-	return r.text, nil
-}
+// func (r *Response) Text() (string, error) {
+// 	if r.text == "" {
+// 		responseBody, err := io.ReadAll(r.HttpResponse.Body)
+// 		if err != nil {
+// 			return "", err
+// 		}
+// 		r.text = string(responseBody)
+// 		return r.text, nil
+// 	}
+// 	return r.text, nil
+// }
 
 func (r *Response) StatusCode() int {
 	if r.statusCode == 0 {
@@ -45,7 +44,7 @@ func (r *Response) StatusCode() int {
 }
 
 func (r *Response) Json(v interface{}) error {
-	err := json.Unmarshal([]byte(r.text), &v)
+	err := json.Unmarshal([]byte(r.Text), &v)
 	if err != nil {
 		return err
 	}

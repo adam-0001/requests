@@ -34,8 +34,32 @@ func contains(s []string, str string) bool {
 	return false
 }
 
+func InferContentType(contentType string, headers *map[string][]string) {
+	// 	_, ok := newHeaders["Content-Type"]
+	// 	_, ok1 := newHeaders["content-type"]
+	// 	if !ok && !ok1 {
+	// 		newHeaders["Content-Type"] = []string{contentType}
+	// 		newHeaders["Header-Order:"] = append(newHeaders["Header-Order:"], "content-type")
+	// }
+
+	//make a copy of the headers keys but in lowercase
+	keysLower := make([]string, len(*headers))
+	i := 0
+	for k := range *headers {
+		keysLower[i] = strings.ToLower(k)
+		i++
+	}
+
+	//Check if keysLower contains "content-type"
+	if !contains(keysLower, "content-type") {
+		(*headers)["Content-Type"] = []string{contentType}
+		(*headers)["Header-Order:"] = append((*headers)["Header-Order:"], "content-type")
+	}
+
+}
+
 func FillNeededHeaders(host string, headers *http.Header) {
-	defHeaders := DefaultHeaders(host)
+	defHeaders := defaultHeaders(host)
 	keysLower := make([]string, len(*headers))
 	i := 0
 	for k := range *headers {
@@ -60,7 +84,7 @@ func FillNeededHeaders(host string, headers *http.Header) {
 	// }
 }
 
-func DefaultHeaders(host string) map[string][]string {
+func defaultHeaders(host string) map[string][]string {
 	return (map[string][]string{
 		"User-Agent":      {"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"},
 		"Accept":          {"*/*"},
