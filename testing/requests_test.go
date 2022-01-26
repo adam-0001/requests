@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"requests"
 	"requests/functions"
 	"strings"
@@ -77,7 +76,7 @@ func TestRequest(t *testing.T) {
 		t.Error(err)
 	}
 	// ERROR HAS TO DO WITH PSUEDO HEADER ORDER BEING NULL : SEE HEADERS.GO
-	fmt.Println(r.Text())
+	// fmt.Println(r.Text())
 	if r.StatusCode() != 200 {
 		t.Errorf("incorrect status code. Wanted: 200, got: %d", r.StatusCode())
 	}
