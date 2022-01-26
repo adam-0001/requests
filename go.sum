@@ -4,10 +4,6 @@ github.com/dsnet/compress v0.0.1/go.mod h1:Aw8dCMJ7RioblQeTqt88akK31OvO8Dhf5Jflh
 github.com/dsnet/golib v0.0.0-20171103203638-1ea166775780/go.mod h1:Lj+Z9rebOhdfkVLjJ8T6VcRQv3SXugXy999NBtR9aFY=
 github.com/klauspost/compress v1.4.1/go.mod h1:RyIbtBH6LamlWaDj8nUwkbUhJ87Yi3uG0guNDohfE1A=
 github.com/klauspost/cpuid v1.2.0/go.mod h1:Pj4uuM528wm8OyEC2QMXAi2YiTZ96dNQPGgoMS4s3ek=
-github.com/papermario8420/cclient v0.0.0-20220126004142-7dd5db2e7915 h1:DMi0UJJIybrEliGDnwKrUS4MuHhoWgDO+8AWhGciSag=
-github.com/papermario8420/cclient v0.0.0-20220126004142-7dd5db2e7915/go.mod h1:3iu19yU92huTDXivy0h3lX87BcMK+lWkNQhhOE7G9Yo=
-github.com/papermario8420/cclient v0.0.0-20220126004350-c71735c1a4e3 h1:UQy+/NTdDK0qN1Q2xIay0Cdc9Ewhdm5tBNCZ6yHMwZc=
-github.com/papermario8420/cclient v0.0.0-20220126004350-c71735c1a4e3/go.mod h1:3iu19yU92huTDXivy0h3lX87BcMK+lWkNQhhOE7G9Yo=
 github.com/papermario8420/cclient v0.0.0-20220126004507-17d1f77e3b85 h1:972L4udWY8Ah14UNggYlabStB/MOZI+zp9vP7uQQ5po=
 github.com/papermario8420/cclient v0.0.0-20220126004507-17d1f77e3b85/go.mod h1:3iu19yU92huTDXivy0h3lX87BcMK+lWkNQhhOE7G9Yo=
 github.com/papermario8420/fhttp v0.0.0-20220123071857-f685f762b638 h1:u0AqTjmB/gMfpdoBKBmQUVBhhtZaPJboA3ue/e6t8+8=

@@ -1,4 +1,4 @@
-module requests
+module github.com/papermario8420/requests
 
 go 1.17
 
