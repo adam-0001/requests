@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"net/url"
 	"time"
 
 	"github.com/papermario8420/requests/functions"
@@ -109,4 +110,12 @@ func (s *session) Connect(url string, params map[string]string, headers []map[st
 
 func (s *session) SetProxy(proxy string) error {
 	return cclient.SetProxy(s.Client, proxy, s.ClientHello)
+}
+
+func (s *session) SetCookie(site url.URL, key string, value string) {
+	cookie := &http.Cookie{
+		Name:  key,
+		Value: value,
+	}
+	s.Client.Jar.SetCookies(&site, []*http.Cookie{cookie})
 }
