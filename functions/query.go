@@ -16,3 +16,11 @@ func GetCompleteQuery(url string, params map[string]string) (string, string, err
 	}
 	return parsedUrl.String(), parsedUrl.Host, nil
 }
+
+func ToQueryString(i map[string]string) string {
+	query := urllib.Values{}
+	for k, v := range i {
+		query.Add(k, v)
+	}
+	return query.Encode()
+}
