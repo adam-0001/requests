@@ -43,7 +43,7 @@ func (r *Response) StatusCode() int {
 	return r.statusCode
 }
 
-func (r *Response) Json(v interface{}) error {
+func (r *Response) Json(v *interface{}) error {
 	err := json.Unmarshal([]byte(r.Text), &v)
 	if err != nil {
 		return err
