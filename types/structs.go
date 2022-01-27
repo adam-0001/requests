@@ -43,13 +43,21 @@ func (r *Response) StatusCode() int {
 	return r.statusCode
 }
 
-func (r *Response) Json(v *interface{}) error {
+func (r *Response) Json(v interface{}) error {
 	err := json.Unmarshal([]byte(r.Text), &v)
 	if err != nil {
 		return err
 	}
 	return nil
 }
+
+// func (r *Response) JsonMap(v *map[string]string) error {
+// 	err := json.Unmarshal([]byte(r.Text), &v)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
 
 func (r *Response) Status() string {
 	if r.status != "" {
