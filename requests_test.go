@@ -52,7 +52,7 @@ func TestData(t *testing.T) {
 }
 
 func TestRequest(t *testing.T) {
-	s, err := Session(20000, "")
+	s, err := NewSession(20000, "")
 	if err != nil {
 		t.Error(err)
 	}
@@ -81,7 +81,7 @@ func TestRequestWithData(t *testing.T) {
 		t.Errorf("incorrect content-Type. Wanted: application/json, got: %s", j)
 	}
 
-	s, err := Session(20000, "")
+	s, err := NewSession(20000, "")
 	if err != nil {
 		t.Error(err)
 	}
