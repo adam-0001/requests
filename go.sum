@@ -1,5 +1,5 @@
-github.com/adam-0001/cclient v0.0.0-20220213085904-0f40aa750e79 h1:gFBya3pphh90AAjcgDKayrOd64C0QR2pMiOJQKx55DI=
-github.com/adam-0001/cclient v0.0.0-20220213085904-0f40aa750e79/go.mod h1:6q1hIGy6S2OLj2XPVDwioAfTS87xnDbdMHZgNJ1GKP0=
+github.com/adam-0001/cclient v0.0.0-20220213092753-c0fd9d56454b h1:1/zMA50cWsshaDpnJNwjOuNLK+OD3LYtOGPTyYyRsdo=
+github.com/adam-0001/cclient v0.0.0-20220213092753-c0fd9d56454b/go.mod h1:5DM2toG1VVGkoAtckOKfmDDh5biwLeVKdZ9ejMT6bLA=
 github.com/adam-0001/fhttp v0.0.0-20220213090405-ca9c15c7e216 h1:dmuBi12YEGi8KkTSs/hLIm7XwNNd6/+cSLTRm17Jhf0=
 github.com/adam-0001/fhttp v0.0.0-20220213090405-ca9c15c7e216/go.mod h1:vuhZaUSgIOaJSL8fWvM2kf6ZX8jhgblORp4abbrEZOI=
 github.com/adam-0001/utls v0.0.0-20220213090505-ec0bc74ee2c4 h1:RASIO+LMqpb5CBVlXhrbkhQp9vsHxHBQ/1qf6f2KSls=
@@ -20,8 +20,8 @@ golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c h1:Vj5n4GlwjmQteupaxJ9+0F
 golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/net v0.0.0-20190328230028-74de082e2cca/go.mod h1:t9HGtf8HONx5eT2rtn7q6eTqICYqUVnKs3thJo3Qplg=
 golang.org/x/net v0.0.0-20210610132358-84b48f89b13b/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=
-golang.org/x/net v0.0.0-20220121210141-e204ce36a2ba h1:6u6sik+bn/y7vILcYkK3iwTBWN7WtBvB0+SZswQnbf8=
-golang.org/x/net v0.0.0-20220121210141-e204ce36a2ba/go.mod h1:CfG3xpIq0wQ8r1q4Su4UZFWDARRcnwPjda9FqA0JpMk=
+golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd h1:O7DYs+zxREGLKzKoMQrtrEacpb0ZVXA5rIwylE2Xchk=
+golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd/go.mod h1:CfG3xpIq0wQ8r1q4Su4UZFWDARRcnwPjda9FqA0JpMk=
 golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20190804053845-51ab0e2deafa/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20201119102817-f84b799fce68/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
