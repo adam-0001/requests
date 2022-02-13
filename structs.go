@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	http "github.com/papermario8420/fhttp"
-	tls "github.com/papermario8420/utls"
+	http "github.com/adam-0001/fhttp"
+	tls "github.com/adam-0001/utls"
 )
 
 type Response struct {

@@ -3,7 +3,7 @@ package functions
 import (
 	"strings"
 
-	http "github.com/papermario8420/fhttp"
+	http "github.com/adam-0001/fhttp"
 )
 
 func MakeHeaders(headers []map[string]string, psuedoHeaderOrder []string) map[string][]string {

@@ -1,16 +1,15 @@
 package requests
 
 import (
-	"fmt"
 	"net/url"
 	"time"
 
-	"github.com/papermario8420/requests/functions"
+	"github.com/adam-0001/requests/functions"
 
-	"github.com/papermario8420/cclient"
-	http "github.com/papermario8420/fhttp"
-	"github.com/papermario8420/fhttp/cookiejar"
-	tls "github.com/papermario8420/utls"
+	"github.com/adam-0001/cclient"
+	http "github.com/adam-0001/fhttp"
+	"github.com/adam-0001/fhttp/cookiejar"
+	tls "github.com/adam-0001/utls"
 )
 
 var DefaultClientHello tls.ClientHelloID = tls.HelloChrome_Auto
@@ -57,11 +56,6 @@ func (s *Session) MakeRequest(method string, url string, params map[string]strin
 	functions.FillNeededHeaders(host, &req.Header)
 	start := time.Now()
 	//Defer a function to return an error if the request panics
-	defer func() {
-		if r := recover(); r != nil {
-			err = fmt.Errorf("%v", r)
-		}
-	}()
 	resp, err := s.Client.Do(req)
 	duration := time.Since(start)
 	if err != nil {

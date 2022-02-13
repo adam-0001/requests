@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/papermario8420/requests/functions"
+	"github.com/adam-0001/requests/functions"
 )
 
 func TestQuery(t *testing.T) {
@@ -113,5 +113,27 @@ func TestRequestWithData(t *testing.T) {
 	}
 	if !strings.Contains(text, "world") {
 		t.Errorf("incorrect response. Wanted: world in response body, got: %s", text)
+	}
+}
+func TestDefer(t *testing.T) {
+	s, err := NewSession(20000, "http://127.0.01:2311")
+	if err != nil {
+		t.Error(err)
+	}
+	headers := []map[string]string{
+		{"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"},
+		{"Accept": "*/*"},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			t.Errorf("Recovered from panic %v", r)
+		}
+	}()
+	r, err := s.MakeRequest("GET", "https://httpbin.org/get", nil, headers, nil, nil, false)
+	if err != nil {
+		t.Error(err)
+	}
+	if r.StatusCode() != 200 {
+		t.Errorf("incorrect status code. Wanted: 200, got: %d", r.StatusCode())
 	}
 }

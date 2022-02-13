@@ -1,11 +1,11 @@
-module github.com/papermario8420/requests
+module github.com/adam-0001/requests
 
 go 1.17
 
 require (
-	github.com/papermario8420/cclient v0.0.0-20220126004507-17d1f77e3b85
-	github.com/papermario8420/fhttp v0.0.0-20220123071857-f685f762b638
-	github.com/papermario8420/utls v0.0.0-20220123065418-6da569430a40
+	github.com/adam-0001/cclient v0.0.0-20220213085904-0f40aa750e79
+	github.com/adam-0001/fhttp v0.0.0-20220213090405-ca9c15c7e216
+	github.com/adam-0001/utls v0.0.0-20220213090505-ec0bc74ee2c4
 )
 
 require (
