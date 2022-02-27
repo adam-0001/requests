@@ -109,6 +109,10 @@ func (s *Session) SetProxy(proxy string) error {
 	return cclient.SetProxy(s.Client, proxy, s.ClientHello)
 }
 
+func (s *Session) SetTimeout(timeout int) {
+	s.Client.Timeout = time.Duration(timeout) * time.Millisecond
+}
+
 func (s *Session) SetCookie(site url.URL, key string, value string) {
 	cookie := &http.Cookie{
 		Name:  key,
