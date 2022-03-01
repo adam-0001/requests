@@ -2,6 +2,7 @@ package requests
 
 import (
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/adam-0001/requests/functions"
@@ -113,10 +114,27 @@ func (s *Session) SetTimeout(timeout int) {
 	s.Client.Timeout = time.Duration(timeout) * time.Millisecond
 }
 
-func (s *Session) SetCookie(site url.URL, key string, value string) {
-	cookie := &http.Cookie{
-		Name:  key,
-		Value: value,
+// func (s *Session) SetCookie(site url.URL, key string, value string) {
+// 	cookie := &http.Cookie{
+// 		Name:  key,
+// 		Value: value,
+// 	}
+// 	s.Client.Jar.SetCookies(&site, []*http.Cookie{cookie})
+// }
+
+func (s *Session) SetCookies(site *url.URL, rawCookie string) {
+	cookies := strings.Split(rawCookie, ";")
+	parsedCookies := []*http.Cookie{}
+	for _, cookie := range cookies {
+		parts := strings.Split(cookie, "=")
+		if len(parts) != 2 {
+			continue
+		}
+		cookie := &http.Cookie{
+			Name:  strings.TrimSpace(parts[0]),
+			Value: strings.TrimSpace(parts[1]),
+		}
+		parsedCookies = append(parsedCookies, cookie)
 	}
-	s.Client.Jar.SetCookies(&site, []*http.Cookie{cookie})
+	s.Client.Jar.SetCookies(site, parsedCookies)
 }
