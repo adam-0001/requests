@@ -122,17 +122,16 @@ func (s *Session) SetTimeout(timeout int) {
 // 	s.Client.Jar.SetCookies(&site, []*http.Cookie{cookie})
 // }
 
-func (s *Session) SetCookies(site *url.URL, rawCookie string) {
-	cookies := strings.Split(rawCookie, ";")
+func (s *Session) SetCookies(site *url.URL, rawCookie []string) {
 	parsedCookies := []*http.Cookie{}
-	for _, cookie := range cookies {
+	for _, cookie := range rawCookie {
 		parts := strings.Split(cookie, "=")
 		if len(parts) != 2 {
 			continue
 		}
 		cookie := &http.Cookie{
 			Name:  strings.TrimSpace(parts[0]),
-			Value: strings.TrimSpace(parts[1]),
+			Value: strings.TrimSpace(strings.Split(parts[1], ";")[0]),
 		}
 		parsedCookies = append(parsedCookies, cookie)
 	}
