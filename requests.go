@@ -138,3 +138,15 @@ func (s *Session) SetCookies(site *url.URL, rawCookie string) {
 	}
 	s.Client.Jar.SetCookies(site, parsedCookies)
 }
+
+func (s *Session) ClearCookies() {
+	s.Client.Jar, _ = cookiejar.New(nil)
+}
+
+func (s *Session) SetCookie(site *url.URL, key, value string) {
+	cookie := &http.Cookie{
+		Name:  key,
+		Value: value,
+	}
+	s.Client.Jar.SetCookies(site, []*http.Cookie{cookie})
+}
