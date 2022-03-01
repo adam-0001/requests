@@ -51,6 +51,10 @@ func (r *Response) Json(v interface{}) error {
 	return nil
 }
 
+func (r *Response) Url() string {
+	return r.HttpResponse.Request.URL.String()
+}
+
 // func (r *Response) JsonMap(v *map[string]string) error {
 // 	err := json.Unmarshal([]byte(r.Text), &v)
 // 	if err != nil {
