@@ -1,7 +1,6 @@
 package requests
 
 import (
-	"net/url"
 	urllib "net/url"
 	"strings"
 	"time"
@@ -143,15 +142,7 @@ func (s *Session) SetTimeout(timeout int) {
 	s.Client.Timeout = time.Duration(timeout) * time.Millisecond
 }
 
-// func (s *Session) SetCookie(site url.URL, key string, value string) {
-// 	cookie := &http.Cookie{
-// 		Name:  key,
-// 		Value: value,
-// 	}
-// 	s.Client.Jar.SetCookies(&site, []*http.Cookie{cookie})
-// }
-
-func (s *Session) SetCookies(site *url.URL, rawCookie []string) {
+func (s *Session) SetCookies(site *urllib.URL, rawCookie []string) {
 	parsedCookies := []*http.Cookie{}
 	for _, cookie := range rawCookie {
 		parts := strings.Split(cookie, "=")
@@ -171,7 +162,7 @@ func (s *Session) ClearCookies() {
 	s.Client.Jar, _ = cookiejar.New(nil)
 }
 
-func (s *Session) SetCookie(site *url.URL, key, value string) {
+func (s *Session) SetCookie(site *urllib.URL, key, value string) {
 	cookie := &http.Cookie{
 		Name:  key,
 		Value: value,
