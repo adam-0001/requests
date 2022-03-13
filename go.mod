@@ -6,6 +6,7 @@ require (
 	github.com/adam-0001/cclient v0.0.0-20220213092753-c0fd9d56454b
 	github.com/adam-0001/fhttp v0.0.0-20220213090405-ca9c15c7e216
 	github.com/adam-0001/utls v0.0.0-20220213090505-ec0bc74ee2c4
+	github.com/andybalholm/brotli v1.0.3
 )
 
 require (

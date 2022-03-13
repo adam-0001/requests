@@ -6,10 +6,10 @@ import (
 	http "github.com/adam-0001/fhttp"
 )
 
-func MakeHeaders(headers []map[string]string, psuedoHeaderOrder []string) map[string][]string {
+func MakeHeaders(headers []map[string]string) map[string][]string {
 	var reqHeaders = map[string][]string{
-		"Header-Order:": {},
-		// "PHeader-Order:": {},
+		"Header-Order:":  {},
+		"PHeader-Order:": {":method", ":authority", ":scheme", ":path"},
 	}
 	for _, v := range headers {
 
@@ -18,9 +18,9 @@ func MakeHeaders(headers []map[string]string, psuedoHeaderOrder []string) map[st
 			reqHeaders["Header-Order:"] = append(reqHeaders["Header-Order:"], strings.ToLower(key))
 		}
 	}
-	if len(psuedoHeaderOrder) > 0 {
-		reqHeaders["PHeader-Order:"] = append(reqHeaders["PHeader-Order:"], psuedoHeaderOrder...)
-	}
+	// if len(psuedoHeaderOrder) > 0 {
+	// 	reqHeaders["PHeader-Order:"] = append(reqHeaders["PHeader-Order:"], psuedoHeaderOrder...)
+	// }
 	return reqHeaders
 }
 

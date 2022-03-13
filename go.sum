@@ -4,6 +4,7 @@ github.com/adam-0001/fhttp v0.0.0-20220213090405-ca9c15c7e216 h1:dmuBi12YEGi8KkT
 github.com/adam-0001/fhttp v0.0.0-20220213090405-ca9c15c7e216/go.mod h1:vuhZaUSgIOaJSL8fWvM2kf6ZX8jhgblORp4abbrEZOI=
 github.com/adam-0001/utls v0.0.0-20220213090505-ec0bc74ee2c4 h1:RASIO+LMqpb5CBVlXhrbkhQp9vsHxHBQ/1qf6f2KSls=
 github.com/adam-0001/utls v0.0.0-20220213090505-ec0bc74ee2c4/go.mod h1:fwvD6KFUV3BebzRd9VnmAZOTn5i9kvBz0eg1yM+Jb68=
+github.com/andybalholm/brotli v1.0.3 h1:fpcw+r1N1h0Poc1F/pHbW40cUm/lMEQslZtCkBQ0UnM=
 github.com/andybalholm/brotli v1.0.3/go.mod h1:fO7iG3H7G2nSZ7m0zPUDn85XEX2GTukHGRSepvi9Eig=
 github.com/dsnet/compress v0.0.1 h1:PlZu0n3Tuv04TzpfPbrnI0HW/YwodEXDS+oPKahKF0Q=
 github.com/dsnet/compress v0.0.1/go.mod h1:Aw8dCMJ7RioblQeTqt88akK31OvO8Dhf5JflhBbQEHo=

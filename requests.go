@@ -2,6 +2,8 @@ package requests
 
 import (
 	"net/url"
+	urllib "net/url"
+	"strings"
 	"time"
 
 	"github.com/adam-0001/requests/functions"
@@ -14,16 +16,16 @@ import (
 
 var DefaultClientHello tls.ClientHelloID = tls.HelloChrome_Auto
 
-func Client(timeout int, proxy string) (*Session, error) {
-	client, err := cclient.NewClient(tls.HelloChrome_Auto, proxy, true, time.Duration(timeout)*time.Millisecond)
+func Client(timeout time.Duration, proxy string) (*Session, error) {
+	client, err := cclient.NewClient(tls.HelloChrome_Auto, proxy, true, timeout)
 	if err != nil {
 		return nil, err
 	}
 	return &Session{&client, DefaultClientHello}, nil
 }
 
-func NewSession(timeout int, proxy string) (*Session, error) {
-	client, err := cclient.NewClient(tls.HelloChrome_Auto, proxy, true, time.Duration(timeout)*time.Millisecond)
+func NewSession(timeout time.Duration, proxy string) (*Session, error) {
+	client, err := cclient.NewClient(tls.HelloChrome_Auto, proxy, true, timeout)
 	if err != nil {
 		return nil, err
 	}
@@ -35,74 +37,99 @@ func NewSession(timeout int, proxy string) (*Session, error) {
 	return &Session{&client, DefaultClientHello}, nil
 }
 
-func (s *Session) MakeRequest(method string, url string, params map[string]string, headers []map[string]string, psuedoHeaderOrder []string, data interface{}, inferContentType bool) (Response, error) {
-	url, host, err := functions.GetCompleteQuery(url, params)
+func (s *Session) MakeRequest(method string, url string, headers []map[string]string, data interface{}) (Response, error) {
+	var resp Response
+	parsedUrl, err := urllib.Parse(url)
 	if err != nil {
-		return Response{}, err
+		return resp, err
 	}
-	newHeaders := functions.MakeHeaders(headers, psuedoHeaderOrder)
-	body, contentType, err := functions.MakeBodyFromData(data)
+	host := parsedUrl.Host
+	newHeaders := functions.MakeHeaders(headers)
+	body, _, err := functions.MakeBodyFromData(data)
 	if err != nil {
-		return Response{}, err
+		return resp, err
 	}
-	if inferContentType {
-		functions.InferContentType(contentType, &newHeaders)
-	}
+	// if inferContentType {
+	// 	functions.InferContentType(contentType, &newHeaders)
+	// }
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
-		return Response{}, err
+		return resp, err
 	}
 	req.Header = newHeaders
 	functions.FillNeededHeaders(host, &req.Header)
 	start := time.Now()
 	//Defer a function to return an error if the request panics
-	resp, err := s.Client.Do(req)
+	rawResp, err := s.Client.Do(req)
 	duration := time.Since(start)
 	if err != nil {
-		return Response{}, err
+		return resp, err
 	}
-	defer resp.Body.Close()
-	text, err := functions.Text(resp)
+	defer rawResp.Body.Close()
+	finalResp, bytes, err := functions.Text(rawResp)
+	encoding, ok := rawResp.Header["Content-Encoding"]
+	if ok {
+		switch strings.ToLower(encoding[0]) {
+		case "gzip":
+			t, err := functions.UnGzip(bytes)
+			if err == nil {
+				finalResp = t
+			}
+		case "br":
+			t, err := functions.UnBrotli(bytes)
+			if err == nil {
+				finalResp = t
+			}
+		case "deflate":
+			t, err := functions.Enflate(bytes)
+			if err == nil {
+				finalResp = t
+			}
+		}
+	}
 	if err != nil {
-		return Response{}, err
+		return resp, err
 	}
-	return Response{HttpResponse: resp, Text: text, Elapsed: duration}, nil
+	resp.HttpResponse = rawResp
+	resp.Text = finalResp
+	resp.Elapsed = duration
+	return resp, nil
 }
 
-func (s *Session) Get(url string, params map[string]string, headers []map[string]string, psuedoHeaderOrder []string, data interface{}, inferContentType bool) (Response, error) {
-	return s.MakeRequest(http.MethodGet, url, params, headers, psuedoHeaderOrder, data, inferContentType)
+func (s *Session) Get(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return s.MakeRequest(http.MethodGet, url, headers, data)
 }
 
-func (s *Session) Post(url string, params map[string]string, headers []map[string]string, psuedoHeaderOrder []string, data interface{}, inferContentType bool) (Response, error) {
-	return s.MakeRequest(http.MethodPost, url, params, headers, psuedoHeaderOrder, data, inferContentType)
+func (s *Session) Post(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return s.MakeRequest(http.MethodPost, url, headers, data)
 }
 
-func (s *Session) Put(url string, params map[string]string, headers []map[string]string, psuedoHeaderOrder []string, data interface{}, inferContentType bool) (Response, error) {
-	return s.MakeRequest(http.MethodPut, url, params, headers, psuedoHeaderOrder, data, inferContentType)
+func (s *Session) Put(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return s.MakeRequest(http.MethodPut, url, headers, data)
 }
 
-func (s *Session) Delete(url string, params map[string]string, headers []map[string]string, psuedoHeaderOrder []string, data interface{}, inferContentType bool) (Response, error) {
-	return s.MakeRequest(http.MethodDelete, url, params, headers, psuedoHeaderOrder, data, inferContentType)
+func (s *Session) Delete(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return s.MakeRequest(http.MethodDelete, url, headers, data)
 }
 
-func (s *Session) Head(url string, params map[string]string, headers []map[string]string, psuedoHeaderOrder []string, data interface{}, inferContentType bool) (Response, error) {
-	return s.MakeRequest(http.MethodHead, url, params, headers, psuedoHeaderOrder, data, inferContentType)
+func (s *Session) Head(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return s.MakeRequest(http.MethodHead, url, headers, data)
 }
 
-func (s *Session) Options(url string, params map[string]string, headers []map[string]string, psuedoHeaderOrder []string, data interface{}, inferContentType bool) (Response, error) {
-	return s.MakeRequest(http.MethodOptions, url, params, headers, psuedoHeaderOrder, data, inferContentType)
+func (s *Session) Options(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return s.MakeRequest(http.MethodOptions, url, headers, data)
 }
 
-func (s *Session) Trace(url string, params map[string]string, headers []map[string]string, psuedoHeaderOrder []string, data interface{}, inferContentType bool) (Response, error) {
-	return s.MakeRequest(http.MethodTrace, url, params, headers, psuedoHeaderOrder, data, inferContentType)
+func (s *Session) Trace(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return s.MakeRequest(http.MethodTrace, url, headers, data)
 }
 
-func (s *Session) Patch(url string, params map[string]string, headers []map[string]string, psuedoHeaderOrder []string, data interface{}, inferContentType bool) (Response, error) {
-	return s.MakeRequest(http.MethodPatch, url, params, headers, psuedoHeaderOrder, data, inferContentType)
+func (s *Session) Patch(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return s.MakeRequest(http.MethodPatch, url, headers, data)
 }
 
-func (s *Session) Connect(url string, params map[string]string, headers []map[string]string, psuedoHeaderOrder []string, data interface{}, inferContentType bool) (Response, error) {
-	return s.MakeRequest(http.MethodConnect, url, params, headers, psuedoHeaderOrder, data, inferContentType)
+func (s *Session) Connect(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return s.MakeRequest(http.MethodConnect, url, headers, data)
 }
 
 func (s *Session) SetProxy(proxy string) error {

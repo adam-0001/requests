@@ -6,13 +6,13 @@ import (
 	http "github.com/adam-0001/fhttp"
 )
 
-func Text(r *http.Response) (string, error) {
+func Text(r *http.Response) (string, []byte, error) {
 	// if r.text == "" {
 	responseBody, err := io.ReadAll(r.Body)
 	if err != nil {
-		return "", err
+		return "", []byte{}, err
 	}
-	return string(responseBody), nil
+	return string(responseBody), responseBody, nil
 	// }
 	// return r.text, nil
 }

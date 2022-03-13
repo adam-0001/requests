@@ -3,6 +3,7 @@ package requests
 import (
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/adam-0001/requests/functions"
 )
@@ -28,7 +29,7 @@ func TestHeaders(t *testing.T) {
 		{"User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1"},
 		{"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"},
 	}
-	newHeaders := functions.MakeHeaders(headers, []string{":method", ":authority"})
+	newHeaders := functions.MakeHeaders(headers)
 
 	if newHeaders["Header-Order:"][0] != "user-agent" ||
 		newHeaders["Header-Order:"][1] != "accept" {
@@ -60,7 +61,7 @@ func TestRequest(t *testing.T) {
 		{"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"},
 		{"Accept": "*/*"},
 	}
-	r, err := s.MakeRequest("GET", "https://httpbin.org/get", nil, headers, nil, nil, false)
+	r, err := s.MakeRequest("GET", "https://httpbin.org/get", headers, nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -88,11 +89,11 @@ func TestRequestWithData(t *testing.T) {
 
 	// jsonStr := []byte(`{"title":"Buy cheese and bread for breakfast."}`)
 
-	resp, err := s.Post("https://httpbin.org/post", map[string]string{"hello": "world"}, nil, nil, "flop=itsworking", true)
+	resp, err := s.Post("https://httpbin.org/post", nil, "flop=itsworking")
 	if err != nil {
 		t.Error(err)
 	}
-	resp1, err := s.Post("https://httpbin.org/post", nil, nil, nil, map[string]string{"hello": "world"}, true)
+	resp1, err := s.Post("https://httpbin.org/post", nil, map[string]string{"hello": "world"})
 	if err != nil {
 		t.Error(err)
 	}
@@ -102,9 +103,6 @@ func TestRequestWithData(t *testing.T) {
 	}
 	if !strings.Contains(text, "flop") {
 		t.Errorf("incorrect response. Wanted: flop in response body, got: %s", text)
-	}
-	if !strings.Contains(text, "hello") {
-		t.Errorf("incorrect response. Wanted: hello in url params, got: %s", text)
 	}
 
 	text = resp1.Text
@@ -116,7 +114,7 @@ func TestRequestWithData(t *testing.T) {
 	}
 }
 func TestDefer(t *testing.T) {
-	s, err := NewSession(20000, "http://127.0.01:2311")
+	s, err := NewSession(20*time.Second, "")
 	if err != nil {
 		t.Error(err)
 	}
@@ -129,7 +127,7 @@ func TestDefer(t *testing.T) {
 			t.Errorf("Recovered from panic %v", r)
 		}
 	}()
-	r, err := s.MakeRequest("GET", "https://httpbin.org/get", nil, headers, nil, nil, false)
+	r, err := s.MakeRequest("GET", "https://httpbin.org/get", headers, nil)
 	if err != nil {
 		t.Error(err)
 	}
