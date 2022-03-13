@@ -11,7 +11,6 @@ import (
 type Response struct {
 	HttpResponse *http.Response
 	statusCode   int
-	status       string
 	headers      map[string]string
 	cookies      map[string]string
 	encoding     string
@@ -64,10 +63,7 @@ func (r *Response) Url() string {
 // }
 
 func (r *Response) Status() string {
-	if r.status != "" {
-		r.status = r.HttpResponse.Status
-	}
-	return r.status
+	return r.HttpResponse.Status
 }
 
 func (r *Response) Headers() map[string]string {
