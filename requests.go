@@ -143,12 +143,40 @@ func (s *Session) SetTimeout(timeout int) {
 	s.Client.Timeout = time.Duration(timeout) * time.Millisecond
 }
 
-func (s *Session) SetCookie(site url.URL, key string, value string) {
+// func (s *Session) SetCookie(site url.URL, key string, value string) {
+// 	cookie := &http.Cookie{
+// 		Name:  key,
+// 		Value: value,
+// 	}
+// 	s.Client.Jar.SetCookies(&site, []*http.Cookie{cookie})
+// }
+
+func (s *Session) SetCookies(site *url.URL, rawCookie []string) {
+	parsedCookies := []*http.Cookie{}
+	for _, cookie := range rawCookie {
+		parts := strings.Split(cookie, "=")
+		if len(parts) != 2 {
+			continue
+		}
+		cookie := &http.Cookie{
+			Name:  strings.TrimSpace(parts[0]),
+			Value: strings.TrimSpace(strings.Split(parts[1], ";")[0]),
+		}
+		parsedCookies = append(parsedCookies, cookie)
+	}
+	s.Client.Jar.SetCookies(site, parsedCookies)
+}
+
+func (s *Session) ClearCookies() {
+	s.Client.Jar, _ = cookiejar.New(nil)
+}
+
+func (s *Session) SetCookie(site *url.URL, key, value string) {
 	cookie := &http.Cookie{
 		Name:  key,
 		Value: value,
 	}
-	s.Client.Jar.SetCookies(&site, []*http.Cookie{cookie})
+	s.Client.Jar.SetCookies(site, []*http.Cookie{cookie})
 }
 
 func Get(url string, headers []map[string]string, data interface{}) (Response, error) {
