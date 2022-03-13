@@ -14,14 +14,17 @@ import (
 	tls "github.com/adam-0001/utls"
 )
 
-var DefaultClientHello tls.ClientHelloID = tls.HelloChrome_Auto
+var (
+	defaultClientHello tls.ClientHelloID = tls.HelloChrome_Auto
+	defaultClient, _                     = Client(30*time.Second, "")
+)
 
 func Client(timeout time.Duration, proxy string) (*Session, error) {
 	client, err := cclient.NewClient(tls.HelloChrome_Auto, proxy, true, timeout)
 	if err != nil {
 		return nil, err
 	}
-	return &Session{&client, DefaultClientHello}, nil
+	return &Session{&client, defaultClientHello}, nil
 }
 
 func NewSession(timeout time.Duration, proxy string) (*Session, error) {
@@ -34,7 +37,7 @@ func NewSession(timeout time.Duration, proxy string) (*Session, error) {
 		return nil, err
 	}
 	client.Jar = jar
-	return &Session{&client, DefaultClientHello}, nil
+	return &Session{&client, defaultClientHello}, nil
 }
 
 func (s *Session) MakeRequest(method string, url string, headers []map[string]string, data interface{}) (Response, error) {
@@ -146,4 +149,40 @@ func (s *Session) SetCookie(site url.URL, key string, value string) {
 		Value: value,
 	}
 	s.Client.Jar.SetCookies(&site, []*http.Cookie{cookie})
+}
+
+func Get(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return defaultClient.MakeRequest(http.MethodGet, url, headers, data)
+}
+
+func Post(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return defaultClient.MakeRequest(http.MethodPost, url, headers, data)
+}
+
+func Put(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return defaultClient.MakeRequest(http.MethodPut, url, headers, data)
+}
+
+func Delete(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return defaultClient.MakeRequest(http.MethodDelete, url, headers, data)
+}
+
+func Head(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return defaultClient.MakeRequest(http.MethodHead, url, headers, data)
+}
+
+func Options(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return defaultClient.MakeRequest(http.MethodOptions, url, headers, data)
+}
+
+func Trace(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return defaultClient.MakeRequest(http.MethodTrace, url, headers, data)
+}
+
+func Patch(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return defaultClient.MakeRequest(http.MethodPatch, url, headers, data)
+}
+
+func Connect(url string, headers []map[string]string, data interface{}) (Response, error) {
+	return defaultClient.MakeRequest(http.MethodConnect, url, headers, data)
 }
