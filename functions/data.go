@@ -8,8 +8,8 @@ import (
 	"reflect"
 )
 
-var InvalidTypeError = errors.New("Invalid Data Type passed to Data")
-var InvalidStructError = errors.New("Structs Cannot Be passed to Data")
+var errInvalidType = errors.New("invalid data type")
+var errInvalidTypeStruct = errors.New("structs are not supported")
 
 func MakeBodyFromData(data interface{}) (io.Reader, string, error) {
 	switch x := data.(type) {
@@ -71,7 +71,7 @@ func MakeBodyFromData(data interface{}) (io.Reader, string, error) {
 		return bytes.NewBuffer(v), "application/json", nil
 	}
 	if reflect.ValueOf(data).Kind() == reflect.Struct {
-		return nil, "", InvalidStructError
+		return nil, "", errInvalidTypeStruct
 	}
-	return nil, "", InvalidTypeError
+	return nil, "", errInvalidType
 }
