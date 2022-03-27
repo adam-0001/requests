@@ -1,3 +1,3 @@
 # requests
 
-**A simple request client built with https://github.com/carcraftz/cclient.**
+**A request client built with https://github.com/carcraftz/cclient, based on python requests.**
