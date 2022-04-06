@@ -23,18 +23,6 @@ type Session struct {
 	ClientHello tls.ClientHelloID
 }
 
-// func (r *Response) Text() (string, error) {
-// 	if r.text == "" {
-// 		responseBody, err := io.ReadAll(r.HttpResponse.Body)
-// 		if err != nil {
-// 			return "", err
-// 		}
-// 		r.text = string(responseBody)
-// 		return r.text, nil
-// 	}
-// 	return r.text, nil
-// }
-
 func (r *Response) StatusCode() int {
 	if r.statusCode == 0 {
 		r.statusCode = r.HttpResponse.StatusCode
@@ -53,14 +41,6 @@ func (r *Response) Json(v interface{}) error {
 func (r *Response) Url() string {
 	return r.HttpResponse.Request.URL.String()
 }
-
-// func (r *Response) JsonMap(v *map[string]string) error {
-// 	err := json.Unmarshal([]byte(r.Text), &v)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
 
 func (r *Response) Status() string {
 	return r.HttpResponse.Status
@@ -92,7 +72,3 @@ func (r *Response) Encoding() string {
 	}
 	return r.encoding
 }
-
-// func (r *Response) Elapsed() time.Duration {
-// 	return r.RElapsed
-// }

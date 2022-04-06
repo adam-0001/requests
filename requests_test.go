@@ -42,14 +42,6 @@ func TestHeaders(t *testing.T) {
 	}
 }
 
-func TestData(t *testing.T) {
-	_, j, _ := functions.MakeBodyFromData(map[string]string{"hello": "world"})
-	if j != "application/json" {
-		t.Errorf("incorrect content-Type. Wanted: application/json, got: %s", j)
-	}
-
-}
-
 func TestRequest(t *testing.T) {
 	s, err := NewSession(20000, "")
 	if err != nil {
@@ -70,11 +62,6 @@ func TestRequest(t *testing.T) {
 }
 
 func TestRequestWithData(t *testing.T) {
-
-	_, j, _ := functions.MakeBodyFromData(map[string]string{"hello": "world"})
-	if j != "application/json" {
-		t.Errorf("incorrect content-Type. Wanted: application/json, got: %s", j)
-	}
 
 	s, err := NewSession(20000, "")
 	if err != nil {

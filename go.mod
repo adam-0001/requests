@@ -1,6 +1,6 @@
 module github.com/adam-0001/requests
 
-go 1.17
+go 1.18
 
 require (
 	github.com/adam-0001/cclient v0.0.0-20220213092753-c0fd9d56454b

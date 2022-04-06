@@ -47,13 +47,10 @@ func (s *Session) MakeRequest(method string, url string, headers []map[string]st
 	}
 	host := parsedUrl.Host
 	newHeaders := functions.MakeHeaders(headers)
-	body, _, err := functions.MakeBodyFromData(data)
+	body, err := functions.MakeBodyFromData(data)
 	if err != nil {
 		return resp, err
 	}
-	// if inferContentType {
-	// 	functions.InferContentType(contentType, &newHeaders)
-	// }
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
 		return resp, err
@@ -61,7 +58,6 @@ func (s *Session) MakeRequest(method string, url string, headers []map[string]st
 	req.Header = newHeaders
 	functions.FillNeededHeaders(host, &req.Header)
 	start := time.Now()
-	//Defer a function to return an error if the request panics
 	rawResp, err := s.Client.Do(req)
 	duration := time.Since(start)
 	if err != nil {

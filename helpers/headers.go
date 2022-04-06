@@ -18,9 +18,7 @@ func MakeHeaders(headers []map[string]string) map[string][]string {
 			reqHeaders["Header-Order:"] = append(reqHeaders["Header-Order:"], strings.ToLower(key))
 		}
 	}
-	// if len(psuedoHeaderOrder) > 0 {
-	// 	reqHeaders["PHeader-Order:"] = append(reqHeaders["PHeader-Order:"], psuedoHeaderOrder...)
-	// }
+
 	return reqHeaders
 }
 
@@ -35,13 +33,6 @@ func contains(s []string, str string) bool {
 }
 
 func InferContentType(contentType string, headers *map[string][]string) {
-	// 	_, ok := newHeaders["Content-Type"]
-	// 	_, ok1 := newHeaders["content-type"]
-	// 	if !ok && !ok1 {
-	// 		newHeaders["Content-Type"] = []string{contentType}
-	// 		newHeaders["Header-Order:"] = append(newHeaders["Header-Order:"], "content-type")
-	// }
-
 	//make a copy of the headers keys but in lowercase
 	keysLower := make([]string, len(*headers))
 	i := 0
@@ -50,7 +41,6 @@ func InferContentType(contentType string, headers *map[string][]string) {
 		i++
 	}
 
-	//Check if keysLower contains "content-type"
 	if !contains(keysLower, "content-type") {
 		(*headers)["Content-Type"] = []string{contentType}
 		(*headers)["Header-Order:"] = append((*headers)["Header-Order:"], "content-type")
