@@ -1,4 +1,4 @@
-package functions
+package helpers
 
 import (
 	"strings"
@@ -73,15 +73,6 @@ func FillNeededHeaders(host string, headers *http.Header) {
 			(*headers)["Header-Order:"] = append((*headers)["Header-Order:"], lower)
 		}
 	}
-	// for k, v := range defHeaders {
-	// 	key := strings.ToLower(k)
-
-	// 	if _, ok := (*headers)[key]; !ok {
-	// 		// fmt.Println("Edited:", key, ok)
-	// 		(*headers)[k] = v
-	// 		(*headers)["Header-Order:"] = append((*headers)["Header-Order:"], key)
-	// 	}
-	// }
 }
 
 func defaultHeaders(host string) map[string][]string {

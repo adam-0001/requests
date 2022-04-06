@@ -3,13 +3,11 @@ package requests
 import (
 	"strings"
 	"testing"
-	"time"
 
-	"github.com/adam-0001/requests/functions"
+	functions "github.com/adam-0001/requests/helpers"
 )
 
 func TestQuery(t *testing.T) {
-	// fmt.Println("Testing query")
 	query := map[string]string{
 		"q":     "test",
 		"hello": "world",
@@ -65,18 +63,14 @@ func TestRequest(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	// ERROR HAS TO DO WITH PSUEDO HEADER ORDER BEING NULL : SEE HEADERS.GO
-	// fmt.Println(r.Text())
+
 	if r.StatusCode() != 200 {
 		t.Errorf("incorrect status code. Wanted: 200, got: %d", r.StatusCode())
 	}
 }
 
 func TestRequestWithData(t *testing.T) {
-	// _, j, _ := functions.MakeBodyFromData(test{"meow", 42})
-	// if j != "application/json" {
-	// 	t.Errorf("incorrect content-Type. Wanted: application/json, got: %s", j)
-	// }
+
 	_, j, _ := functions.MakeBodyFromData(map[string]string{"hello": "world"})
 	if j != "application/json" {
 		t.Errorf("incorrect content-Type. Wanted: application/json, got: %s", j)
@@ -86,8 +80,6 @@ func TestRequestWithData(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-
-	// jsonStr := []byte(`{"title":"Buy cheese and bread for breakfast."}`)
 
 	resp, err := s.Post("https://httpbin.org/post", nil, "flop=itsworking")
 	if err != nil {
@@ -111,27 +103,5 @@ func TestRequestWithData(t *testing.T) {
 	}
 	if !strings.Contains(text, "world") {
 		t.Errorf("incorrect response. Wanted: world in response body, got: %s", text)
-	}
-}
-func TestDefer(t *testing.T) {
-	s, err := NewSession(20*time.Second, "")
-	if err != nil {
-		t.Error(err)
-	}
-	headers := []map[string]string{
-		{"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"},
-		{"Accept": "*/*"},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			t.Errorf("Recovered from panic %v", r)
-		}
-	}()
-	r, err := s.MakeRequest("GET", "https://httpbin.org/get", headers, nil)
-	if err != nil {
-		t.Error(err)
-	}
-	if r.StatusCode() != 200 {
-		t.Errorf("incorrect status code. Wanted: 200, got: %d", r.StatusCode())
 	}
 }

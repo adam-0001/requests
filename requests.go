@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/adam-0001/requests/functions"
+	functions "github.com/adam-0001/requests/helpers"
 
 	"github.com/adam-0001/cclient"
 	http "github.com/adam-0001/fhttp"

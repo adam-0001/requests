@@ -67,7 +67,7 @@ func (r *Response) Status() string {
 }
 
 func (r *Response) Headers() map[string]string {
-	if r.headers == nil {
+	if len(r.headers) == 0 {
 		r.headers = make(map[string]string)
 		for k, v := range r.HttpResponse.Header {
 			r.headers[k] = v[0]
