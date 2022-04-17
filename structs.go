@@ -9,13 +9,14 @@ import (
 )
 
 type Response struct {
-	HttpResponse *http.Response
-	statusCode   int
-	headers      map[string]string
-	cookies      map[string]string
-	encoding     string
-	Elapsed      time.Duration
-	Text         string
+	HttpResponse    *http.Response
+	statusCode      int
+	headers         map[string]string
+	cookies         map[string]string
+	encoding        string
+	Elapsed         time.Duration
+	Text            string
+	RedirectHistory []string
 }
 
 type Session struct {

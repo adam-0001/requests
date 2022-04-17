@@ -1,9 +1,14 @@
 # Requests
+
 **Requests is a simple http client inspired by [python requests](https://github.com/psf/requests). Built on top of [cclient](https://github.com/carcraftz/cclient) and [fhttp](https://github.com/carcraftz/fhttp), requests maintains simplicity while enabling features such as HTTP/2, ordered headers, and much more.**
-___
-# Quickstart  
+
+---
+
+# Quickstart
+
 #
-#### Get ####
+
+#### Get
 
 ```go
 package main

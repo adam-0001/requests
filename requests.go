@@ -88,6 +88,7 @@ func (s *Session) MakeRequest(method string, url string, headers []map[string]st
 	if err != nil {
 		return resp, err
 	}
+	resp.RedirectHistory = functions.SetRedirectUrlHistory(rawResp)
 	resp.HttpResponse = rawResp
 	resp.Text = finalResp
 	resp.Elapsed = duration
