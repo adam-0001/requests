@@ -47,5 +47,5 @@ func MakeBodyFromData(data interface{}) (io.Reader, error) {
 	if err != nil {
 		return nil, errInvalidType
 	}
-	return bytes.NewBuffer(res), errInvalidType
+	return bytes.NewBuffer(res), nil
 }
