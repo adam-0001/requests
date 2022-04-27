@@ -92,3 +92,12 @@ func TestRequestWithData(t *testing.T) {
 		t.Errorf("incorrect response. Wanted: world in response body, got: %s", text)
 	}
 }
+
+func TestXxx(t *testing.T) {
+	client, _ := Client(20000, "http://127.0.0.1:8888")
+	res, err := client.Get("https://kith.com/robots.txt", nil, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(res.StatusCode())
+}
