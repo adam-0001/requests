@@ -49,7 +49,7 @@ func InferContentType(contentType string, headers *map[string][]string) {
 
 func FillNeededHeaders(host string, headers *http.Header) {
 	defHeaders := defaultHeaders(host)
-	keysLower := make([]string, len(defHeaders))
+	keysLower := make([]string, len(*headers))
 	i := 0
 	for k := range *headers {
 		keysLower[i] = strings.ToLower(k)
