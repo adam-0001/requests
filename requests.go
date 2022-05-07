@@ -167,6 +167,16 @@ func (s *Session) SetCookie(site *urllib.URL, key, value string) {
 	s.Client.Jar.SetCookies(site, []*http.Cookie{cookie})
 }
 
+func (s *Session) GetCookie(site *urllib.URL, key string) string {
+	cks := s.Client.Jar.Cookies(site)
+	for i := 0; i < len(cks); i++ {
+		if cks[i].Name == key {
+			return cks[i].Value
+		}
+	}
+	return ""
+}
+
 func Get(url string, headers []map[string]string, data interface{}) (Response, error) {
 	return defaultClient.MakeRequest(http.MethodGet, url, headers, data)
 }
