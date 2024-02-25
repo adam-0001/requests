@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/adam-0001/requests/helpers"
-	functions "github.com/adam-0001/requests/helpers"
 
 	"github.com/adam-0001/cclient"
 	http "github.com/adam-0001/fhttp"
@@ -47,8 +46,8 @@ func (s *Session) MakeRequest(method string, url string, headers []map[string]st
 		return resp, err
 	}
 	host := parsedUrl.Host
-	newHeaders := functions.MakeHeaders(headers)
-	body, err := functions.MakeBodyFromData(data)
+	newHeaders := helpers.MakeHeaders(headers)
+	body, err := helpers.MakeBodyFromData(data)
 	if err != nil {
 		return resp, err
 	}
@@ -57,7 +56,7 @@ func (s *Session) MakeRequest(method string, url string, headers []map[string]st
 		return resp, err
 	}
 	req.Header = newHeaders
-	functions.FillNeededHeaders(host, &req.Header)
+	helpers.FillNeededHeaders(host, &req.Header)
 	start := time.Now()
 	rawResp, err := s.Client.Do(req)
 	duration := time.Since(start)
@@ -65,22 +64,22 @@ func (s *Session) MakeRequest(method string, url string, headers []map[string]st
 		return resp, err
 	}
 	defer rawResp.Body.Close()
-	finalResp, bytes, err := functions.Text(rawResp)
+	finalResp, bytes, err := helpers.Text(rawResp)
 	encoding, ok := rawResp.Header["Content-Encoding"]
 	if ok {
 		switch strings.ToLower(encoding[0]) {
 		case "gzip":
-			t, err := functions.UnGzip(bytes)
+			t, err := helpers.UnGzip(bytes)
 			if err == nil {
 				finalResp = t
 			}
 		case "br":
-			t, err := functions.UnBrotli(bytes)
+			t, err := helpers.UnBrotli(bytes)
 			if err == nil {
 				finalResp = t
 			}
 		case "deflate":
-			t, err := functions.Inflate(bytes)
+			t, err := helpers.Inflate(bytes)
 			if err == nil {
 				finalResp = t
 			}
@@ -89,7 +88,7 @@ func (s *Session) MakeRequest(method string, url string, headers []map[string]st
 	if err != nil {
 		return resp, err
 	}
-	resp.RedirectHistory = functions.SetRedirectUrlHistory(rawResp)
+	resp.RedirectHistory = helpers.SetRedirectUrlHistory(rawResp)
 	resp.HttpResponse = rawResp
 	resp.Text = finalResp
 	resp.Elapsed = duration
