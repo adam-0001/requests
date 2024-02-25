@@ -56,8 +56,8 @@ func TestRequest(t *testing.T) {
 		t.Error(err)
 	}
 
-	if r.StatusCode() != 200 {
-		t.Errorf("incorrect status code. Wanted: 200, got: %d", r.StatusCode())
+	if r.StatusCode != 200 {
+		t.Errorf("incorrect status code. Wanted: 200, got: %d", r.StatusCode)
 	}
 }
 
@@ -94,10 +94,10 @@ func TestRequestWithData(t *testing.T) {
 }
 
 func TestXxx(t *testing.T) {
-	client, _ := Client(20000, "http://127.0.0.1:8888")
+	client, _ := Client(20000, "http://127.0.0.1:8888") //Need proxy for testing (otherwise will fail)
 	res, err := client.Get("https://kith.com/robots.txt", nil, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Log(res.StatusCode())
+	t.Log(res.StatusCode)
 }

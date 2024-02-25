@@ -8,6 +8,7 @@ import (
 
 var headers = []map[string]string{
 	{"hello": "world"},
+	{"foo": "bar"},
 }
 
 func main() {
@@ -15,6 +16,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(resp.StatusCode())
+	fmt.Println(resp.StatusCode)
 	fmt.Println(resp.Text)
 }

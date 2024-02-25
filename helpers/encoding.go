@@ -22,7 +22,7 @@ func UnBrotli(bd []byte) (string, error) {
 	return string(body), err
 }
 
-func Enflate(bd []byte) (string, error) {
+func Inflate(bd []byte) (string, error) {
 	zr, _ := zlib.NewReader(bytes.NewReader(bd))
 	defer zr.Close()
 	body, err := ioutil.ReadAll(zr)

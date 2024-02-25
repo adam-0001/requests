@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/adam-0001/requests/helpers"
 	functions "github.com/adam-0001/requests/helpers"
 
 	"github.com/adam-0001/cclient"
@@ -79,7 +80,7 @@ func (s *Session) MakeRequest(method string, url string, headers []map[string]st
 				finalResp = t
 			}
 		case "deflate":
-			t, err := functions.Enflate(bytes)
+			t, err := functions.Inflate(bytes)
 			if err == nil {
 				finalResp = t
 			}
@@ -92,6 +93,12 @@ func (s *Session) MakeRequest(method string, url string, headers []map[string]st
 	resp.HttpResponse = rawResp
 	resp.Text = finalResp
 	resp.Elapsed = duration
+	resp.Status = rawResp.Status
+	resp.Url = rawResp.Request.URL.String()
+	resp.StatusCode = rawResp.StatusCode
+	resp.Headers = helpers.GetHeaders(rawResp)
+	resp.Cookies = helpers.GetCookies(rawResp)
+	resp.Encoding = rawResp.Header.Get("Content-Type")
 	return resp, nil
 }
 
