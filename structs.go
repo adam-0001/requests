@@ -6,7 +6,7 @@ import (
 	"time"
 
 	http "github.com/adam-0001/fhttp"
-	tls "github.com/adam-0001/utls"
+	tls "github.com/refraction-networking/utls"
 )
 
 type Response struct {

@@ -10,7 +10,7 @@ import (
 	"github.com/adam-0001/cclient"
 	http "github.com/adam-0001/fhttp"
 	"github.com/adam-0001/fhttp/cookiejar"
-	tls "github.com/adam-0001/utls"
+	tls "github.com/refraction-networking/utls"
 )
 
 var (
