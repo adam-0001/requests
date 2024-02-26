@@ -3,6 +3,7 @@ package requests
 import (
 	"encoding/json"
 	"os"
+	"sync"
 	"time"
 
 	http "github.com/adam-0001/fhttp"
@@ -23,6 +24,7 @@ type Response struct {
 }
 
 type Session struct {
+	mutex       sync.Mutex
 	Client      *http.Client
 	ClientHello tls.ClientHelloID
 }

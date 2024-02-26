@@ -1,7 +1,9 @@
 package requests
 
 import (
+	h "net/http"
 	"strings"
+	"sync"
 	"testing"
 
 	functions "github.com/adam-0001/requests/helpers"
@@ -22,7 +24,6 @@ func TestQuery(t *testing.T) {
 }
 
 func TestHeaders(t *testing.T) {
-	// fmt.Println("Testing headers")
 	headers := []map[string]string{
 		{"User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1"},
 		{"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"},
@@ -43,6 +44,7 @@ func TestHeaders(t *testing.T) {
 }
 
 func TestRequest(t *testing.T) {
+	LogLevel = 0
 	s, err := NewSession(20000, "")
 	if err != nil {
 		t.Error(err)
@@ -62,7 +64,7 @@ func TestRequest(t *testing.T) {
 }
 
 func TestRequestWithData(t *testing.T) {
-
+	LogLevel = 0
 	s, err := NewSession(20000, "")
 	if err != nil {
 		t.Error(err)
@@ -93,11 +95,72 @@ func TestRequestWithData(t *testing.T) {
 	}
 }
 
-func TestXxx(t *testing.T) {
+func TestProxy(t *testing.T) {
+	LogLevel = 0
 	client, _ := Client(20000, "http://127.0.0.1:8888") //Need proxy for testing (otherwise will fail)
 	res, err := client.Get("https://kith.com/robots.txt", nil, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 	t.Log(res.StatusCode)
+}
+
+func TestGoRoutines(t *testing.T) {
+	LogLevel = 0
+	wg := &sync.WaitGroup{}
+	s, err := NewSession(20000, "")
+	if err != nil {
+		t.Error(err)
+	}
+	headers := []map[string]string{
+		{"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"},
+		{"Accept": "*/*"},
+	}
+	wg.Add(12)
+	for i := 0; i < 12; i++ {
+		go func() {
+			_, err := s.Get("https://httpbin.org/get", headers, nil)
+			if err != nil {
+				t.Error(err)
+			}
+			wg.Done()
+		}()
+	}
+	wg.Wait()
+}
+
+func TestSequentials(t *testing.T) {
+	LogLevel = 0
+	s, err := NewSession(20000, "")
+	if err != nil {
+		t.Error(err)
+	}
+	headers := []map[string]string{
+		{"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"},
+		{"Accept": "*/*"},
+	}
+	for i := 0; i < 12; i++ {
+		_, err := s.Get("https://httpbin.org/get", headers, nil)
+		if err != nil {
+			t.Error(err)
+		}
+
+	}
+}
+
+func TestGoRoutinesNet(t *testing.T) {
+	LogLevel = 0
+	wg := &sync.WaitGroup{}
+	client := &h.Client{}
+	wg.Add(12)
+	for i := 0; i < 12; i++ {
+		go func() {
+			_, err := client.Get("https://httpbin.org/get")
+			if err != nil {
+				t.Error(err)
+			}
+			wg.Done()
+		}()
+	}
+	wg.Wait()
 }

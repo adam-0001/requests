@@ -3,9 +3,11 @@ package requests
 import (
 	urllib "net/url"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/adam-0001/requests/helpers"
+	"github.com/charmbracelet/log"
 
 	"github.com/adam-0001/cclient"
 	http "github.com/adam-0001/fhttp"
@@ -14,19 +16,33 @@ import (
 )
 
 var (
-	defaultClientHello tls.ClientHelloID = tls.HelloChrome_Auto
-	defaultClient, _                     = Client(30*time.Second, "")
+	isDefaultClientInit bool
+	defaultClientHello  tls.ClientHelloID = tls.HelloChrome_Auto
+	defaultClient       *Session
+	LogLevel            = 1 //Set to 0 for no warning logs
 )
 
+func init() {
+	LogLevel = 0
+	defaultClient, _ = Client(30*time.Second, "")
+	LogLevel = 1
+}
+
 func Client(timeout time.Duration, proxy string) (*Session, error) {
+	if LogLevel != 0 {
+		log.Warn("Note that you should not use a single client across multiple goroutines. Instead, create a new client for each goroutine. This will be fixed in the future. Set log level to 0 to disable this warning.")
+	}
 	client, err := cclient.NewClient(tls.HelloChrome_Auto, proxy, true, timeout)
 	if err != nil {
 		return nil, err
 	}
-	return &Session{&client, defaultClientHello}, nil
+	return &Session{sync.Mutex{}, &client, defaultClientHello}, nil
 }
 
 func NewSession(timeout time.Duration, proxy string) (*Session, error) {
+	if LogLevel != 0 {
+		log.Warn("Note that you should not use a single session across multiple goroutines. Instead, create a new session for each goroutine. This will be fixed in the future. Set log level to 0 to disable this warning.")
+	}
 	client, err := cclient.NewClient(tls.HelloChrome_Auto, proxy, true, timeout)
 	if err != nil {
 		return nil, err
@@ -36,7 +52,7 @@ func NewSession(timeout time.Duration, proxy string) (*Session, error) {
 		return nil, err
 	}
 	client.Jar = jar
-	return &Session{&client, defaultClientHello}, nil
+	return &Session{sync.Mutex{}, &client, defaultClientHello}, nil
 }
 
 func (s *Session) MakeRequest(method string, url string, headers []map[string]string, data interface{}) (Response, error) {
@@ -58,7 +74,9 @@ func (s *Session) MakeRequest(method string, url string, headers []map[string]st
 	req.Header = newHeaders
 	helpers.FillNeededHeaders(host, &req.Header)
 	start := time.Now()
+	s.mutex.Lock()
 	rawResp, err := s.Client.Do(req)
+	s.mutex.Unlock()
 	duration := time.Since(start)
 	if err != nil {
 		return resp, err
