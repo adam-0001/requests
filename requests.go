@@ -201,6 +201,14 @@ func (s *Session) GetCookie(site *urllib.URL, key string) string {
 	return ""
 }
 
+func (s *Session) GetCookies(site *urllib.URL) []*http.Cookie {
+	return defaultClient.Client.Jar.Cookies(site)
+}
+
+// func (s *Session) SetClientHello(hello tls.ClientHelloID) {
+// 	s.ClientHello = hello
+// }
+
 func Get(url string, headers []map[string]string, data interface{}) (Response, error) {
 	return defaultClient.MakeRequest(http.MethodGet, url, headers, data)
 }
