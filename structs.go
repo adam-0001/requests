@@ -27,6 +27,7 @@ type Session struct {
 	mutex       sync.Mutex
 	Client      *http.Client
 	ClientHello tls.ClientHelloID
+	Proxy       string
 }
 
 func (r *Response) Json(v interface{}) error {

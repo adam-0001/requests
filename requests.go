@@ -36,7 +36,7 @@ func Client(timeout time.Duration, proxy string) (*Session, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Session{sync.Mutex{}, &client, defaultClientHello}, nil
+	return &Session{sync.Mutex{}, &client, defaultClientHello, proxy}, nil
 }
 
 func NewSession(timeout time.Duration, proxy string) (*Session, error) {
@@ -52,7 +52,7 @@ func NewSession(timeout time.Duration, proxy string) (*Session, error) {
 		return nil, err
 	}
 	client.Jar = jar
-	return &Session{sync.Mutex{}, &client, defaultClientHello}, nil
+	return &Session{sync.Mutex{}, &client, defaultClientHello, proxy}, nil
 }
 
 func (s *Session) MakeRequest(method string, url string, headers []map[string]string, data interface{}) (Response, error) {

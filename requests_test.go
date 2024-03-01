@@ -5,6 +5,7 @@ import (
 	"strings"
 	"sync"
 	"testing"
+	"time"
 
 	functions "github.com/adam-0001/requests/helpers"
 )
@@ -162,5 +163,31 @@ func TestGoRoutinesNet(t *testing.T) {
 			wg.Done()
 		}()
 	}
+	wg.Wait()
+}
+
+func TestConcurrentSharedSessions(t *testing.T) {
+	LogLevel = 0
+	wg := &sync.WaitGroup{}
+	s, _ := NewSession(20*time.Second, "http://localhost:8888")
+	s2, _ := NewClientFromSession(s)
+
+	wg.Add(12)
+	for i := 0; i < 12; i++ {
+		var use *Session
+		if i%2 == 0 {
+			use = s
+		} else {
+			use = s2
+		}
+		go func(s *Session) {
+			_, err := s.Get("https://httpbin.org/cookies/set?freeform=test", nil, nil)
+			if err != nil {
+				t.Error(err)
+			}
+			wg.Done()
+		}(use)
+	}
+
 	wg.Wait()
 }
