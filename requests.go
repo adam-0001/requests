@@ -19,11 +19,10 @@ var (
 	isDefaultClientInit bool
 	defaultClientHello  tls.ClientHelloID = tls.HelloChrome_Auto
 	defaultClient       *Session
-	LogLevel            = 1 //Set to 0 for no warning logs
+	LogLevel            = 0 //Set to 0 for no warning logs
 )
 
 func init() {
-	LogLevel = 0
 	defaultClient, _ = Client(30*time.Second, "")
 	LogLevel = 1
 }
@@ -116,6 +115,7 @@ func (s *Session) MakeRequest(method string, url string, headers []map[string]st
 	resp.Headers = helpers.GetHeaders(rawResp)
 	resp.Cookies = helpers.GetCookies(rawResp)
 	resp.Encoding = rawResp.Header.Get("Content-Type")
+	resp.Ok = rawResp.StatusCode >= 200 && rawResp.StatusCode < 400
 	return resp, nil
 }
 

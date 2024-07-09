@@ -21,6 +21,7 @@ type Response struct {
 	Cookies         map[string]string
 	Encoding        string
 	StatusCode      int
+	Ok              bool
 }
 
 type Session struct {
